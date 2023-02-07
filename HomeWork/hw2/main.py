@@ -1,22 +1,31 @@
 from flask import Flask
-from faker import Faker
+import utils
 
 app = Flask(__name__)
-fake = Faker()
+
+
+@app.route("/")
+def main():
+    return '''
+        <li class="menu__item"><a href="/requirements" class="menu__link">requirements</a></li>
+        <li class="menu__item"><a href="/generate_users" class="menu__link">generate_users</a></li>
+        <li class="menu__item"><a href="/space" class="menu__link">space</a></li>
+    '''
 
 
 @app.route("/requirements")
 def requirements():
-    req = open('requirements.txt', 'r')
-    return req
+    return utils.requirements()
 
 
-@app.route("/faker")
-def faker():
-    names = []
-    for i in range(100):
-        names.append(i)
-    return names
+@app.route("/generate_users")
+def generate_users():
+    return utils.generate_users()
+
+
+@app.route("/space")
+def space():
+    return utils.space()
 
 
 if __name__ == '__main__':
