@@ -10,7 +10,7 @@ def requirements():
 
 
 def generate_users():
-    num = int(input("Enter the number of records:"))
+    num = 100
     items = [f'{fake.name()} + {fake.email()}' for _ in range(num)]
     print(items)
     return items

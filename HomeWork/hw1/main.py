@@ -1,22 +1,15 @@
 def parse(query: str) -> dict:
-    item = query.split('?')
-    if len(item) == 1:
+    names_values_dict = {}
+    values = query.split('?')
+    if len(values) == 1:
         return {}
-    item = item[1].split('&')
-    if len(item) == 0:
-        return {}
-    dict1 = []
-    keys = []
-    values = []
-    for i in item:
-        dict1.extend(i.split('='))
-    for i in dict1:
-        if dict1.index(i) % 2 == 0:
-            keys.append(i)
+    for pair in values[1].split('&'):
+        if len(pair) == 0:
+            continue
         else:
-            values.append(i)
-    dictionary = {k: v for k, v in zip(keys, values)}
-    return dictionary
+            pair_key, pair_value = pair.split('=')
+            names_values_dict[pair_key] = pair_value
+    return names_values_dict
 
 
 if __name__ == '__main__':
