@@ -1,5 +1,5 @@
 from flask import Flask, request
-from utils import generate_passwords
+from utils import generate_passwords, execute_sql
 
 app = Flask(__name__)
 
@@ -27,70 +27,56 @@ def password():
 
 
 @app.route("/emails/create")
-def emails_create():
-    import sqlite3
-    con = sqlite3.connect('tutorial.db')
-    cur = con.cursor()
+def email_create():
+    email_value = request.args['email_value']
+    name = request.args['name']
 
-    sql = '''
+    sql = f'''
     INSERT INTO Emails (EmailValue, Name)
-    VALUES ('test@asd.com', 'John');
+    VALUES ('{email_value}', '{name}');
     '''
-    cur.execute(sql)
-    con.commit()
-    con.close()
-    return ""
+    execute_sql(sql)
+    return ''
 
 
 @app.route("/emails/read")
-def emails_read():
+def email_read():
     import sqlite3
-    con = sqlite3.connect('tutorial.db')
+    con = sqlite3.connect("tutorial.db")
     cur = con.cursor()
 
     sql = '''
-    SELECT * FROM Emails;
-    '''
-    # res =
-    cur.execute(sql)
-    con.commit()
+        SELECT * FROM Emails;
+        '''
+    res = cur.execute(sql)
+    emails = res.fetchall()
     con.close()
-    return ""
+    return emails
 
 
 @app.route("/emails/update")
-def emails_update():
-    import sqlite3
-    con = sqlite3.connect('tutorial.db')
-    cur = con.cursor()
-
-    sql = '''
+def email_update():
+    email_id = request.args['email_id']
+    name = request.args['name']
+    sql = f'''
     UPDATE Emails
     SET name = '{name}'
     WHERE EmailID = {email_id};
     '''
-    # res =
-    cur.execute(sql)
-    con.commit()
-    con.close()
-    return ""
+    execute_sql(sql)
+    return ''
 
 
 @app.route("/emails/delete")
-def emails_delete():
-    import sqlite3
-    con = sqlite3.connect('tutorial.db')
-    cur = con.cursor()
-
-    sql = '''
-    DELETE * FROM Emails;
+def email_delete():
+    email_id = request.args['email_id']
+    sql = f'''
+    DELETE FROM Emails
+    WHERE EmailID = {email_id};
     '''
-    # res =
-    cur.execute(sql)
-    con.commit()
-    con.close()
-    return ""
+    execute_sql(sql)
+    return ''
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=5002)
