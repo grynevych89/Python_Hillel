@@ -1,5 +1,6 @@
+from flask import request
 from faker import Faker
-import requests
+
 
 fake = Faker()
 
@@ -10,8 +11,10 @@ def requirements():
 
 
 def generate_users():
-    num = 100
-    items = [f'{fake.name()} + {fake.email()}' for _ in range(num)]
+    length_num = request.args.get('length', '100')
+
+    items = [f'{fake.name()} + {fake.email()}' for _ in range(int(length_num))]
+
     print(items)
     return items
 
